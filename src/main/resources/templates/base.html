@@ -1,0 +1,49 @@
+<html
+  lang="en"
+  th:fragment="parent(content,title,script)"
+  xmlns:th="http://www.thymeleaf.org"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title data-th-replace="${title}">Base Page</title>
+    <link rel="stylesheet" data-th-href="@{'/css/output.css/'}" />
+    <link rel="stylesheet" data-th-href="@{'/css/style.css'}">
+    <link
+      href="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+    />
+  </head>
+  <body class="dark:bg-gray-900 bg-gray-100 dark:text-white">
+    <!-- Commom Header -->
+
+    <div>
+
+      <div th:if="${LoggedInUser}">
+        <div data-th-replace="user/navbar::user_navbar"></div>
+        <div data-th-replace="user/sidebar"></div>
+      </div>
+
+      <div th:unless="${LoggedInUser}">
+      <div data-th-replace="navbar::navbar"></div>
+      </div>
+    </div>
+    <!-- Main Content -->
+    <div class="p-4 h-screen">
+      <section data-th-replace="${content}"></section>
+    </div>
+
+    <footer th:if="${currentPage != 'contacts'}" class="p-4">Learn Code with ME !</footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/flowbite@2.5.1/dist/flowbite.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script data-th-src="@{'/js/script.js'}">
+      // document.querySelector('html').classList.add('light')
+    </script>
+    <th:block data-th-replace="${script}"></th:block>
+  </body>
+</html>

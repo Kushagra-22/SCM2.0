@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  th:replace="~{base::parent(~{::#content},~{::title},~{::script})}"
+>
+  <head>
+    <title data-th-text="${LoggedInUser.name}">Dashboard</title>
+  </head>
+  <body>
+    <div class="pl-64 pt-20 "  id="content">
+      <div class="mb-10">
+        <h1 class="text-5xl">Welcome to Dashboard</h1>
+
+      <br />
+      <h1 class="font-serif text-3xl" data-th-text="${response}"></h1>
+      </div>
+      <div><p class="mt-100 font-sans text-sm">
+        Lorem ipsum dolor sit amet consectetur adipisicing elit. Eligendi ipsam
+        quasi eius quidem vitae fugit, facilis commodi aspernatur esse animi
+        mollitia autem vel qui facere est voluptas quo unde nam!
+      </p>
+    </div>
+    </div>
+    
+    <script></script>
+  </body>
+</html>

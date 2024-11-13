@@ -1,0 +1,44 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About</title>
+    <link rel="stylesheet" data-th-href="@{'/css/output.css/'}" />
+
+  </head>
+  <body>
+    <h1>This is a about Page</h1>
+    <hr />
+    Using fragment
+    <div class="host-tag" th:replace="${isActive}? ~{base :: parent(~{::p})} : ~{base::test(~{::#not_logged_in})} ">
+      <p class="text-cyan-100">This is dynamic content</p>
+      <button>Click on dynamic content</button>
+    </div>
+
+    <section id="not_logged_in">
+        <h1>User is not logged</h1>
+    </section>
+     <div th:fragment="~(base::test)">
+
+    </div> -->
+<!-- </body> -->
+<!-- </html> -->
+
+<!DOCTYPE html>
+<html
+  lang="en"
+  th:replace="~{base::parent(~{::#content},~{::title},~{::script})}"
+>
+  <head>
+    <title>About Page</title>
+  </head>
+  <body>
+    <div id="content">
+      <h2>Welcome to About Page!!</h2>
+    </div>
+    <script>
+      console.log("About Page");
+    </script>
+  </body>
+</html>

@@ -1,0 +1,31 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Service</title>
+</head>
+<body>
+    <h1>Service Loading!!</h1>
+    <div th:replace="~{base :: parent(~{::section})}">
+        <section>
+            <h1>This is dynamic service content pass to parent</h1>
+        </section>
+
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en" th:replace="~{base::parent(~{::#content},~{::title},~{::script})}" >
+<head>
+    <title>Service Page</title>
+</head>
+<body>
+    <span id="content">
+        <h1>Welcome To Services Page</h1>
+    </span>
+    <script>
+        console.log("Service Page")
+    </script>
+</body>
+</html>

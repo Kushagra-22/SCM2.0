@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  th:replace="~{base::parent(~{::#content},~{::title},~{::script})}"
+  th:with="showFooter=false"
+>
+  <head>
+    <title data-th-text="${LoggedInUser.name}">Profile Page</title>
+  </head>
+  <body>
+    <div id="content">
+      <div th:if="${LoggedInUser}">
+        <div data-th-replace="~{user/sidebar::sidebar}"></div>
+      </div>
+      <div class="sm:pl-64 pt-20" style="height: 1000px">
+        <div class="grid grid-col-12">
+          <div class="col-span-4"></div>
+
+          <div class="col-span-12 md:col-span-6">
+            <div
+              class="card block p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+            >
+              <!-- <div data-th-replace="message"></div> -->
+
+              <h1 class="text-2xl font-semibold">Add New Contact</h1>
+              <p class="text-gray-500">
+                This contact will be saved on cloud...
+              </p>
+              <form
+                action=""
+                class="mt-8"
+                data-th-action="@{'/user/contacts/add'}"
+                method="post"
+                data-th-object="${contactForm}"
+                enctype="multipart/form-data"
+              >
+                <div>
+                  <div>
+                    <label
+                      for="website-admin"
+                      class="text-left mt-2 block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                      >Username</label
+                    >
+                    <div class="flex">
+                      <span
+                        class="inline-flex items-center px-3 text-sm text-gray-900 bg-gray-200 border rounded-e-0 border-gray-300 border-e-0 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600"
+                      >
+                        <svg
+                          class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                        >
+                          <path
+                            d="M10 0a10 10 0 1 0 10 10A10.011 10.011 0 0 0 10 0Zm0 5a3 3 0 1 1 0 6 3 3 0 0 1 0-6Zm0 13a8.949 8.949 0 0 1-4.951-1.488A3.987 3.987 0 0 1 9 13h2a3.987 3.987 0 0 1 3.951 3.512A8.949 8.949 0 0 1 10 18Z"
+                          />
+                        </svg>
+                      </span>
+
+                      <input
+                        data-th-field="*{name}"
+                        type="text"
+                        id="website-admin"
+                        class="rounded-none rounded-e-lg bg-gray-50 border text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm border-gray-300 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="elonmusk"
+                      />
+                    </div>
+                    <p
+                      data-th-if="${#fields.hasErrors('name')}"
+                      data-th-errors="*{name}"
+                      class="text-red-600 px-1 py-1 text-left"
+                    >
+                      Field is required
+                    </p>
+                  </div>
+                  <!-- email  -->
+                  <div>
+                    <label
+                      for="input-group-1"
+                      class="block mb-2 text-sm text-left mt-8 font-medium text-gray-900 dark:text-white"
+                      >Your Email</label
+                    >
+                    <div class="relative mb-6">
+                      <div
+                        class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
+                      >
+                        <svg
+                          class="w-4 h-4 text-gray-500 dark:text-gray-400"
+                          aria-hidden="true"
+                          xmlns="http://www.w3.org/2000/svg"
+                          fill="currentColor"
+                          viewBox="0 0 20 16"
+                        >
+                          <path
+                            d="m10.036 8.278 9.258-7.79A1.979 1.979 0 0 0 18 0H2A1.987 1.987 0 0 0 .641.541l9.395 7.737Z"
+                          />
+                          <path
+                            d="M11.241 9.817c-.36.275-.801.425-1.255.427-.428 0-.845-.138-1.187-.395L0 2.6V14a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V2.5l-8.759 7.317Z"
+                          />
+                        </svg>
+                      </div>
+                      <input
+                        type="text"
+                        data-th-field="*{email}"
+                        id="input-group-1"
+                        class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        placeholder="name@gmail.com"
+                      />
+                    </div>
+                  </div>
+                  <p
+                    data-th-if="${#fields.hasErrors('email')}"
+                    data-th-errors="*{name}"
+                    class="text-red-600 px-1 py-1 text-left"
+                  >
+                    Field is required
+                  </p>
+                </div>
+                <!-- Phone number -->
+                <div>
+                  <label
+                    for="input-group-1"
+                    class="block mb-2 text-sm text-left mt-8 font-medium text-gray-900 dark:text-white"
+                    >Phone Number
+                  </label>
+                  <div class="relative mb-6">
+                    <div
+                      class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
+                    >
+                      <i class="fa-solid fa-phone"></i>
+                    </div>
+                    <input
+                      type="text"
+                      data-th-field="*{phoneNumber}"
+                      id="input-group-1"
+                      class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="90000000"
+                    />
+                  </div>
+                  <p
+                    data-th-if="${#fields.hasErrors('phoneNumber')}"
+                    data-th-errors="*{phoneNumber}"
+                    class="text-red-600 px-1 py-1 text-left"
+                  >
+                    Field is required
+                  </p>
+                </div>
+
+                <!-- address -->
+                <div>
+                  <label
+                    for="message"
+                    class="block text-left mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                    >Contact Address</label
+                  >
+                  <textarea
+                    id="message"
+                    data-th-field="*{address}"
+                    rows="4"
+                    class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                    placeholder="Write your thoughts here..."
+                  ></textarea>
+                  <p
+                    data-th-if="${#fields.hasErrors('address')}"
+                    data-th-errors="*{name}"
+                    class="text-red-600 px-1 py-1 text-left"
+                  ></p>
+                </div>
+                <!-- social links -->
+                <div class="flex space-x-3 mt-2 mb-3">
+                  <div class="w-full">
+                    <div class="mb-3">
+                      <div class="relative mb-6">
+                        <div
+                          class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
+                        >
+                          <i class="fa-brands fa-facebook"></i>
+                        </div>
+
+                        <input
+                          type="text"
+                          data-th-field="*{websiteLink}"
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-full">
+                    <div class="mb-3">
+                      <div class="relative mb-6">
+                        <div
+                          class="absolute inset-y-0 start-0 flex items-center ps-3.5 pointer-events-none"
+                        >
+                          <i class="fa-brands fa-linkedin"></i>
+                        </div>
+                        <input
+                          type="text"
+                          data-th-field="*{linkedinLink}"
+                          id="input-group-1"
+                          class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                          placeholder=""
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- profile pic upload -->
+                <div>
+                  <label
+                    class="block mb-2 text-sm text-left font-medium text-gray-900 dark:text-white"
+                    for="file_input"
+                    >Upload file</label
+                  >
+                  <input
+                    id="image_file"
+                    class="block w-full text-sm text-gray-900 border border-gray-300 rounded-lg cursor-pointer bg-gray-50 dark:text-gray-400 focus:outline-none dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400"
+                    data-th-field="*{contactImage}"
+                    type="file"
+                  />
+                  <p
+                    class="text-red-500"
+                    data-th-if="${#fields.hasErrors('contactImage')}"
+                    data-th-errors="*{contactImage}"
+                  >
+                    Invalid Image
+                  </p>
+                  <img
+                    class="max-h-52 mx-auto rounded-lg shadow"
+                    id="upload_image_preview"
+                    alt=""
+                  />
+                </div>
+                <!-- favourite checkbox -->
+                <div class="flex items-center mb-4">
+                  <input
+                    id="default-checkbox"
+                    type="checkbox"
+                    data-th-field="*{favourite}"
+                    value=""
+                    class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-400"
+                  />
+                  <label
+                    for="default-checkbox"
+                    class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-200"
+                    >Is this contact your favourite one ?</label
+                  >
+                </div>
+                <!-- button -->
+                <div class="button-container">
+                  <button
+                    class="px-3 py-2 rounded text-white bg-blue-600 dark:bg-blue-600"
+                    type="submit"
+                  >
+                    Add Contact
+                  </button>
+                  <button
+                    class="px-3 py-2 rounded text-white bg-blue-600"
+                    type="reset"
+                  >
+                    Reset
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script th:src="@{'/js/admin.js'}"></script>
+    <script>
+      console.log("Add contage page ");
+      document.querySelector('footer').remove()
+    </script>
+  </body>
+</html>

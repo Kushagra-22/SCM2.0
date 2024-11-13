@@ -1,3 +1,7 @@
 I am bug fix file text...
 
 Another bug fix
+
+another bug fixes
+
+fourth bug fixed...

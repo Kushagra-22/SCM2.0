@@ -54,11 +54,7 @@
 			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-		<dependency>
-			<groupId>com.mysql</groupId>
-			<artifactId>mysql-connector-j</artifactId>
-			<scope>runtime</scope>
-		</dependency>
+		
 		<!-- cloudinary configuration -->
 		<dependency>
 		    <groupId>com.cloudinary</groupId>
@@ -81,6 +77,11 @@
     <artifactId>spring-boot-starter-security</artifactId>
     <version>3.3.4</version>
 </dependency>
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+			<scope>runtime</scope>
+		</dependency>
 		
 		<dependency>
 			<groupId>org.projectlombok</groupId>

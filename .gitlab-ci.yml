@@ -8,7 +8,7 @@ stages:
 
 variables:
   NODE_VERSION: "18"  # Adjust based on your project requirements
-  IMAGE_NAME: registry.gitlab.com/$CI_PROJECT_PATH/app
+  IMAGE_NAME: registry.gitlab.com/scm2/app
   IMAGE_TAG: $CI_COMMIT_SHORT_SHA
 cache:
   paths:

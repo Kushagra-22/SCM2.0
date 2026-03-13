@@ -1,0 +1,46 @@
+
+image: maven:3.9.6-eclipse-temurin-17
+
+stages:
+  - init
+  - build
+
+variables:
+  NODE_VERSION: "18"  # Adjust based on your project requirements
+
+cache:
+  paths:
+    - node_modules/
+    - .m2/repository/
+
+before_script:
+  - echo "Starting Build Pipeline"
+
+# build_frontend:
+#   stage: build
+#   image: node:${NODE_VERSION}
+#   script:
+#     - echo "Installing frontend dependencies"
+#     - npm install
+#     - echo "Building Tailwind CSS"
+#     - npx tailwindcss -i ./src/input.css -o ./src/output.css --minify
+#     - echo "Building JavaScript"
+#     - npm run build
+#   artifacts:
+#     paths:
+#       - dist/ # Adjust if your frontend build outputs elsewhere
+#     expire_in: 1 hour
+init:
+  stage: init
+  script:
+    - echo "Initializaing"
+    - mvn --version
+    - java --version
+build:
+  stage: build
+  script:
+    - echo "Building backend with Maven"
+    - mvn clean package -DskipTests
+  artifacts:
+    paths:
+      - target

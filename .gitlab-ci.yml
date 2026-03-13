@@ -8,7 +8,7 @@ stages:
 
 variables:
   NODE_VERSION: "18"  # Adjust based on your project requirements
-  IMAGE_NAME: registry.gitlab.com/scm2/app
+  IMAGE_NAME: $CI_REGISTRY_IMAGE
   IMAGE_TAG: $CI_COMMIT_SHORT_SHA
 cache:
   paths:
@@ -55,6 +55,10 @@ docker-build:
   variables:
     DOCKER_TLS_CERTDIR: ""
   before_script:
+    - echo $ CI_REGISTRY 
+    - echo $ CI_REGISTRY_USER
+    - echo $ CI_REGISTRY_PASSWORD
+    
     - apk add --no-cache docker-compose
     - docker login -u $CI_REGISTRY_USER -p $CI_REGISTRY_PASSWORD $CI_REGISTRY
   script:

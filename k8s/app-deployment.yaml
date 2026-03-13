@@ -14,8 +14,8 @@ spec:
     spec:
       containers:
       - name: scm2
-        image: scm2.0:latest
-        imagePullPolicy: Never
+        image: registry.gitlab.com/demoproject5930807/scm2-0:8790224a
+        # imagePullPolicy: Never
         ports:
         - containerPort: 8081
         env:
@@ -27,3 +27,5 @@ spec:
           value: root1234
         - name: SPRING_JPA_HIBERNATE_DDL_AUTO
           value: update
+      imagePullSecrets:
+      - name: gitlab-registry-secret    

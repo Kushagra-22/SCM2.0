@@ -1,17 +1,17 @@
 package com.scm.config;
 
+import com.scm.utils.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
-
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import com.scm.services.impl.SecurityCustomUserDetailService;
 
 @Configuration
@@ -37,17 +37,15 @@ public class SecurityConfig {
     private AuthFailtureHandler authFailtureHandler;
     @Autowired
     private OAuthAuthenicationSuccessHandler handler;
+    @Autowired
+    private JwtUtil jwtUtil;
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
 
-
-
-    // COnfiguration of authentication provider
     @Bean
     AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-        // User detail ka object
         daoAuthenticationProvider.setUserDetailsService(userDetailService);
-
-        // Password encoder ka object
         daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
         return daoAuthenticationProvider;
     }
@@ -59,7 +57,6 @@ public class SecurityConfig {
             authorize.requestMatchers("/user/**").authenticated();
             authorize.anyRequest().permitAll();
         });
-
         httpSecurity.formLogin(formLogin -> {
             formLogin.loginPage("/login");
             formLogin.loginProcessingUrl("/authenticate");

@@ -34,7 +34,6 @@ import lombok.Setter;
 public class Users implements UserDetails {
     @Id
     private String userId;
-
     private String name;
     private String email;
     private String password;

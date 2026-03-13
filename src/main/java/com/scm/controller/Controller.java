@@ -90,7 +90,7 @@ public class Controller {
         user.setPassword(userForm.getPassword());
         user.setAbout(userForm.getAbout());
         user.setPhoneNumber(userForm.getPhoneNumber());
-        user.setEnabled(false);
+        user.setEnabled(true);
         Users savedUser = userService.saveUser(user);
         System.out.println(userForm);
         System.out.println("User Registered");

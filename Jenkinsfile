@@ -14,7 +14,7 @@ pipeline {
 
         REGISTRY_URL = "your-registry-url"
 
-        REGISTRY_CREDENTIALS = credentials('docker-registry-creds')
+        // REGISTRY_CREDENTIALS = credentials('docker-registry-creds')
     }
 
     stages {
@@ -51,9 +51,9 @@ pipeline {
                     docker-compose build app
                 """
 
-                sh """
-                    docker tag scm2.0:latest ${IMAGE_NAME}:${IMAGE_TAG}
-                """
+                // sh """
+                //     docker tag scm2.0:latest ${IMAGE_NAME}:${IMAGE_TAG}
+                // """
             }
         }
 

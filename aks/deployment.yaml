@@ -14,8 +14,7 @@ spec:
     spec:
       containers:
       - name: scm2
-        image: scm2.0:latest
-        imagePullPolicy: IfNotPresent
+        image: scm2registry.azurecr.io/scm2-app:1.0
         ports:
         - containerPort: 8081
         env:

@@ -1,3 +1,27 @@
+# =============================================
+# FAILURE SIMULATION: Wrong Database URL
+# =============================================
+# This deployment intentionally uses a WRONG database hostname
+# to simulate a database connectivity failure.
+#
+# What happens:
+#   1. Pod starts, Spring Boot tries to connect to "wrong-db-host"
+#   2. Connection fails → UnknownHostException
+#   3. Readiness probe fails → Pod marked as "NotReady"
+#   4. K8s removes pod from Service endpoints (no traffic routed)
+#   5. After failureThreshold (3), liveness probe also fails
+#   6. Container enters CrashLoopBackOff
+#
+# How to debug:
+#   kubectl get pods                      → see NotReady/CrashLoopBackOff
+#   kubectl describe pod <pod-name>       → see probe failure events
+#   kubectl logs <pod-name>               → see Spring Boot error logs
+#   kubectl get events --sort-by=.lastTimestamp  → see cluster events
+#
+# How to fix:
+#   kubectl apply -f k8s/app/app-deployment.yaml  → apply correct manifest
+# =============================================
+
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -30,8 +54,9 @@ spec:
         - containerPort: 8081
           name: http
         env:
+        # ⚠️ INTENTIONAL BUG: wrong-db-host does not exist
         - name: SPRING_DATASOURCE_URL
-          value: "jdbc:mysql://db:3306/scm2.0"
+          value: "jdbc:mysql://wrong-db-host:3306/scm2.0"
         - name: SPRING_DATASOURCE_USERNAME
           valueFrom:
             secretKeyRef:
@@ -44,9 +69,6 @@ spec:
               key: mysql-root-password
         - name: SPRING_JPA_HIBERNATE_DDL_AUTO
           value: "update"
-        # ===== Readiness Probe =====
-        # Checks if the app can serve traffic (DB connected, dependencies ready)
-        # If this fails, K8s removes the pod from Service endpoints
         readinessProbe:
           httpGet:
             path: /actuator/health/readiness
@@ -56,9 +78,6 @@ spec:
           timeoutSeconds: 3
           failureThreshold: 3
           successThreshold: 1
-        # ===== Liveness Probe =====
-        # Checks if the app process is alive (not deadlocked/frozen)
-        # If this fails, K8s restarts the container
         livenessProbe:
           httpGet:
             path: /actuator/health/liveness
@@ -67,7 +86,6 @@ spec:
           periodSeconds: 10
           timeoutSeconds: 3
           failureThreshold: 3
-        # ===== Resource Limits =====
         resources:
           requests:
             memory: "256Mi"

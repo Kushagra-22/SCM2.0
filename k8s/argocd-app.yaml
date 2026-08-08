@@ -1,0 +1,54 @@
+# =============================================
+# ArgoCD Application — MySQL Database
+# =============================================
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: scm2-mysql
+  namespace: argocd
+  labels:
+    app: scm2
+    component: database
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Kushagra-22/SCM2.0.git
+    targetRevision: main
+    path: k8s/mysql
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      selfHeal: true
+      prune: true
+    syncOptions:
+      - CreateNamespace=true
+
+---
+# =============================================
+# ArgoCD Application — SCM2 Backend App
+# =============================================
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: scm2-app
+  namespace: argocd
+  labels:
+    app: scm2
+    component: backend
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/Kushagra-22/SCM2.0.git
+    targetRevision: main
+    path: k8s/app
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: default
+  syncPolicy:
+    automated:
+      selfHeal: true   # Auto-fix drift from desired state
+      prune: true      # Remove resources no longer in Git
+    syncOptions:
+      - CreateNamespace=true

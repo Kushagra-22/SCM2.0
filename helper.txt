@@ -1,0 +1,78 @@
+# =============================================
+# SCM2.0 DevOps Infrastructure — Quick Reference
+# =============================================
+
+# ==================== SETUP ====================
+
+# 1. Run the automated setup (does everything)
+./setup.sh
+
+# — OR do it manually: —
+
+# 2. Create Kind cluster
+kind create cluster --name scm2-cluster --config kind-config.yaml --wait 60s
+
+# 3. Build and load Docker image into Kind
+docker build -t scm2.0:latest .
+kind load docker-image scm2.0:latest --name scm2-cluster
+
+# 4. Install NGINX Ingress Controller
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+# 5. Install ArgoCD
+kubectl create namespace argocd
+kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/stable/manifests/install.yaml
+
+# 6. Deploy K8s manifests (order matters!)
+kubectl apply -f k8s/mysql/mysql-secret.yaml
+kubectl apply -f k8s/mysql/mysql-pvc.yaml
+kubectl apply -f k8s/mysql/mysql-deployment.yaml
+kubectl apply -f k8s/mysql/mysql-service.yaml
+kubectl apply -f k8s/app/app-deployment.yaml
+kubectl apply -f k8s/app/app-service.yaml
+kubectl apply -f k8s/app/app-ingress.yaml
+
+# 7. Apply ArgoCD application definitions
+kubectl apply -f k8s/argocd-app.yaml
+
+# ==================== ACCESS ====================
+
+# App: http://localhost:30007
+
+# ArgoCD UI:
+kubectl port-forward svc/argocd-server -n argocd 8080:443
+# URL: https://localhost:8080
+# Username: admin
+# Password:
+kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 --decode
+
+# Ingress (add to /etc/hosts first: 127.0.0.1 scm2.local):
+# http://scm2.local
+
+# ==================== FAILURE SIMULATION ====================
+
+# Trigger failure (wrong DB URL):
+kubectl apply -f k8s/failure-sim/app-deployment-broken.yaml
+
+# Debug:
+kubectl get pods
+kubectl describe pod <pod-name>
+kubectl logs <pod-name>
+kubectl get events --sort-by=.lastTimestamp
+
+# Fix:
+kubectl apply -f k8s/app/app-deployment.yaml
+
+# ==================== USEFUL COMMANDS ====================
+
+kubectl get pods -A                           # All pods
+kubectl get svc                               # Services
+kubectl get deployments                       # Deployments
+kubectl describe deployment scm2-app          # Deployment details
+kubectl logs -f -l app=scm2                   # Stream app logs
+kubectl get events --sort-by=.lastTimestamp    # Recent events
+kubectl get applications -n argocd            # ArgoCD apps
+
+# ==================== TEARDOWN ====================
+
+kind delete cluster --name scm2-cluster

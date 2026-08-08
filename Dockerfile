@@ -1,13 +1,46 @@
-FROM eclipse-temurin:17-jdk-jammy
+# ============================================
+# Stage 1: Build the application with Maven
+# ============================================
+FROM maven:3.9-eclipse-temurin-17 AS builder
 
-# Set the working directory in the container
+WORKDIR /build
+
+# Copy POM first for dependency caching
+COPY pom.xml .
+RUN mvn dependency:go-offline -B
+
+# Copy source and build
+COPY src ./src
+RUN mvn clean package -DskipTests -B
+
+# ============================================
+# Stage 2: Runtime (JRE only — smaller image)
+# ============================================
+FROM eclipse-temurin:17-jre-jammy
+
+LABEL maintainer="Kushagra Sharma"
+LABEL description="SCM2.0 Smart Contact Manager"
+
 WORKDIR /app
 
-# Copy the built JAR file into the container
-COPY target/scm2.0-0.0.1-SNAPSHOT.jar app.jar
+# Create non-root user for security
+RUN groupadd -r appuser && useradd -r -g appuser appuser
 
-# Expose the port your app runs on (default 8080 for Spring Boot)
+# Copy JAR from builder stage
+COPY --from=builder /build/target/scm2.0-0.0.1-SNAPSHOT.jar app.jar
+
+# Set ownership
+RUN chown appuser:appuser app.jar
+
+# Switch to non-root user
+USER appuser
+
+# Expose application port
 EXPOSE 8081
+
+# Health check at Docker level
+HEALTHCHECK --interval=30s --timeout=5s --start-period=60s --retries=3 \
+  CMD curl -f http://localhost:8081/actuator/health || exit 1
 
 # Run the application
 ENTRYPOINT ["java", "-jar", "app.jar"]
